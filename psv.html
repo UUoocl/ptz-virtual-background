@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <!-- for optimal display on high DPI devices -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <link rel="stylesheet" href="./node_modules/@photo-sphere-viewer/core/index.css" />
+    <title>PSV Viewer Window</title>
+</head>
+<body>
+    <data id="cameraPosition" data-pos-p="0" data-pos-t="0" data-pos-z="0"></data>
+    <section id="Choose-file">
+        <h2 class="r-fit-text">To start choose a image file</h2>
+        <input type="file" id="psvImage"/><br /> 
+    </section>
+<!-- the viewer container must have a defined size -->
+<div id="viewer" style="width: 98vw; height: 98vh;"></div>
+
+</body>
+<script src="./psv-renderer.js"></script>
+<script type="importmap">
+    {
+        "imports": {
+            "three": "./node_modules/three/build/three.module.js",
+            "@photo-sphere-viewer/core": "./node_modules/@photo-sphere-viewer/core/index.module.js"
+        }
+    }
+</script>
+
+<script type="module">
+    import { Viewer } from '@photo-sphere-viewer/core';
+
+    document.getElementById("psvImage").addEventListener('change',psvStart);
+
+    function psvStart(){
+        var image =  document.getElementById("psvImage").files[0];
+        
+        console.log(image.path)
+        const viewer = new Viewer({
+            container: document.querySelector('#viewer'),
+            panorama: image.path,
+        });
+        document.getElementById("Choose-file").innerHTML = "";
+    
+        //listen for attribute change
+        const targetNode =  document.getElementById("cameraPosition");
+        const config = { attributes: true};
+        // Callback function to execute when mutations are observed
+        const callback = (mutationList, observer) => {
+            let ptzData=0, p=0, t=0, z=0;
+            console.log(mutationList[0])
+            console.log(`The ${mutationList[0].attributeName} attribute was modified.`);
+            ptzData = document.getElementById("cameraPosition");
+            console.log(ptzData)
+            p = ptzData.getAttribute("data-pos-p");        
+            t = ptzData.getAttribute("data-pos-t");        
+            z = ptzData.getAttribute("data-pos-z");
+            p = ((p+500400)/1000800)*6.27
+            if(t<0){
+                t = (t/165600)*1.57;
+            }else{
+                t = (t/320400)*1.57;
+            }
+            z = (z/400)*100;
+            console.log(p,t,z)        
+            viewer.animate({
+            yaw: p,
+            pitch: t,
+            zoom: z,
+            speed: 900})
+        };
+
+        // Create an observer instance linked to the callback function
+        const observer = new MutationObserver(callback);
+
+        // Start observing the target node for configured mutations
+        observer.observe(targetNode, config);
+        
+    //viewer.addEventListener('click', ({ data }) => {
+    //console.log(`${data.rightclick ? 'right ' : ''}clicked at yaw: ${data.yaw} pitch: ${data.pitch}`);
+    /* viewer.animate({
+            yaw: 0,
+            pitch: 0,
+            speed: 10000,
+            }) */
+
+    //        viewer.rotate({
+    //        yaw: 0,
+   //         pitch: 0
+     //       })        
+    //});
+
+  /*   viewer.addEventListener('zoom-updated', ({ zoomLevel }) => {
+    console.log(`new zoom level is ${zoomLevel}`);
+    let pos = viewer.getPosition();
+    console.log(pos); */
+    /* viewer.animate({
+            yaw: 3.14,
+            pitch: 0,
+            speed: 100,
+            }) */
+/* 
+            viewer.rotate({
+            yaw: 3.14,
+            pitch: 0
+            })
+    });
+ */
+    viewer.addEventListener('position-updated', ({ position, zoomLevel }) => {
+        console.log(viewer.getZoomLevel())
+    console.log(`new position is yaw: ${position.yaw} pitch: ${position.pitch} zoom: ${zoomLevel}`);
+    });
+    }
+</script>
+</html>

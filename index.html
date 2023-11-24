@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <!-- https://developer.mozilla.org/en-US/docs/Web/HTTP/CSP -->
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'">
+    <title>photo-sphere-viewer Virtual Background Main Window</title>
+  </head>
+  <body>
+
+    <label for="installedCameras">Choose a camera:</label>
+    <select name="cameras" id="cameras">
+    <option value="">--Please choose a camera--</option></select>
+    <br><br>
+
+    <input type="button" id="SubmitButton" value="submit"/>
+ 
+    <script src="./index-renderer.js"></script>
+  </body>
+</html>

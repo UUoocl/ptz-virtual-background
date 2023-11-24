@@ -1,0 +1,30 @@
+{
+  "name": "photo-sphere-viewer-virtual-background",
+  "version": "0.0.1",
+  "description": "An Electron App to control the Photo Sphere Viewer js with the Insta360 Link PTZ camera",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron-forge start",
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "package": "electron-forge package",
+    "make": "electron-forge make"
+  },
+  "author": "uuoocl",
+  "license": "MIT",
+  "devDependencies": {
+    "@electron-forge/cli": "^7.1.0",
+    "@electron-forge/maker-deb": "^7.1.0",
+    "@electron-forge/maker-rpm": "^7.1.0",
+    "@electron-forge/maker-squirrel": "^7.1.0",
+    "@electron-forge/maker-zip": "^7.1.0",
+    "@electron-forge/plugin-auto-unpack-natives": "^7.1.0",
+    "electron": "^27.1.0"
+  },
+  "dependencies": {
+    "@mediapipe/selfie_segmentation": "^0.1.1675465747",
+    "@mediapipe/tasks-vision": "^0.10.0",
+    "@photo-sphere-viewer/core": "^5.4.4",
+    "electron-squirrel-startup": "^1.0.0",
+    "three": "^0.158.0"
+  }
+}
